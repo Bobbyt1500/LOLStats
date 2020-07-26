@@ -6,8 +6,8 @@ import re
 
 class Bot(discord.Client):
     async def on_ready(self):
-        self.api = rai.RiotApi("APIKEY", "na1")
-        self.accepted_list = [200689481496526850,299314753220640778,149869170291507201]
+        self.api = rai.RiotApi("insert key", "na1")
+        self.accepted_list = ["accepted users"]
         with open("item.json") as json_file:
             self.item_data = json.load(json_file)
         with open("champion.json") as json_file:
@@ -22,11 +22,6 @@ class Bot(discord.Client):
             
             # Split message into arguments
             split_message = message.content.split(" ")
-
-            if split_message[0] == "setkey":
-                self.api.api_key = split_message[1]
-                await message.channel.send("Updated")
-                return
 
             # Request Command
             if split_message[0] == "request":
