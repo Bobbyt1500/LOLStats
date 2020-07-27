@@ -187,4 +187,27 @@ def get_player_statistics(match_history, account_id, extras = False, game_mode_e
         return (statistics, amount, participantDatas, timelines, teams, games, champions)
     else:
         return (statistics, amount)
-        
+
+def get_rune_information(rune, runevar1, runevar2, runevar3, runes_data):
+    name = "Not Found"
+    descriptions = "Descriptions Not Found"
+
+    # Check in rune data for the rune
+    for rune_info in runes_data:
+        if rune_info["id"] == rune:
+
+            # Get the name and descriptions
+            name = rune_info["name"]
+            descriptions = rune_info["endOfGameStatDescs"]
+
+            # Update descriptions with rune vars
+            for i in range(len(descriptions)):
+                if "@eogvar1@" in descriptions[i]:
+                    descriptions[i] = descriptions[i].replace("@eogvar1@", str(runevar1))
+                if "@eogvar2@" in descriptions[i]:
+                    descriptions[i] = descriptions[i].replace("@eogvar2@", str(runevar2))
+                if "@eogvar3@" in descriptions[i]:
+                    descriptions[i] = descriptions[i].replace("@eogvar3@", str(runevar3))
+
+                
+    return (name, descriptions)
