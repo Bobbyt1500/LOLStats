@@ -326,7 +326,7 @@ class Bot(discord.Client):
                 
                 
 def create_runes_embed(statistics, runes_data):
-    new_embed = discord.Embed(title="Mains",color=discord.Color.purple())
+    new_embed = discord.Embed(title="Runes",color=discord.Color.purple())
 
     # Make embed field for each rune
     for i in range(6):
