@@ -6,14 +6,16 @@ import re
 
 class Bot(discord.Client):
     async def on_ready(self):
-        self.api = rai.RiotApi("insert key", "na1")
-        self.accepted_list = ["accepted users"]
+        self.api = rai.RiotApi("Insert Key", "na1")
+        self.accepted_list = ["Insert User IDs"]
         with open("item.json") as json_file:
             self.item_data = json.load(json_file)
         with open("champion.json") as json_file:
             self.champion_data = json.load(json_file)
         with open("queues.json") as json_file:
             self.queue_data = json.load(json_file)
+        with open("perks.json") as json_file:
+            self.runes_data = json.load(json_file)
 
     async def on_message(self, message):
         user = message.author
@@ -198,6 +200,7 @@ class Bot(discord.Client):
                     for i in range(len(match_history[1])):
                         sent = await message.channel.send(embed=create_game_preview_embed(match_history[1][i], match_history[0][i],self.champion_data["data"],self.queue_data,statistics[0][i],username))
                         await sent.add_reaction("✅")
+                        await sent.add_reaction("♦️")
 
             # Match Request Command
             if split_message[0] == "matchrequest":
@@ -305,19 +308,36 @@ class Bot(discord.Client):
                         await message.channel.send("Error getting statistics")
                         return
 
-                    await message.channel.send(embed=create_main_embed(statistics,single=True))
-                    await message.channel.send(embed=create_damages_embed(statistics))
-                    await message.channel.send(embed=create_tanked_embed(statistics))
-                    await message.channel.send(embed=create_vision_embed(statistics))
-                    await message.channel.send(embed=create_jungle_embed(statistics))
-                    await message.channel.send(embed=create_diffs_embed(statistics))
-                    await message.channel.send(embed=create_per_min_embed(statistics))
-                    await message.channel.send(embed=create_team_values_embed(statistics,single=True,champion_data=self.champion_data["data"]))
-                    await message.channel.send(embed=create_build_embed(statistics,self.item_data["data"]))
-                    await message.channel.send(embed=create_misc_embed(statistics))
-                
-                
+                    if reaction.emoji == "♦️":
+                        await message.channel.send(embed=create_runes_embed(statistics,self.runes_data))
 
+                    if reaction.emoji == "✅":
+                        # Send normal statistics
+                        await message.channel.send(embed=create_main_embed(statistics,single=True))
+                        await message.channel.send(embed=create_damages_embed(statistics))
+                        await message.channel.send(embed=create_tanked_embed(statistics))
+                        await message.channel.send(embed=create_vision_embed(statistics))
+                        await message.channel.send(embed=create_jungle_embed(statistics))
+                        await message.channel.send(embed=create_diffs_embed(statistics))
+                        await message.channel.send(embed=create_per_min_embed(statistics))
+                        await message.channel.send(embed=create_team_values_embed(statistics,single=True,champion_data=self.champion_data["data"]))
+                        await message.channel.send(embed=create_build_embed(statistics,self.item_data["data"]))
+                        await message.channel.send(embed=create_misc_embed(statistics))
+                
+                
+def create_runes_embed(statistics, runes_data):
+    new_embed = discord.Embed(title="Mains",color=discord.Color.purple())
+
+    # Make embed field for each rune
+    for i in range(6):
+        info = rai.get_rune_information(statistics[0][0]["perk" + str(i)],statistics[0][0]["perk" + str(i) + "Var1"],statistics[0][0]["perk" + str(i) + "Var2"],statistics[0][0]["perk" + str(i) + "Var3"],runes_data)
+        formatted_description = ""
+        for desc in info[1]:
+            formatted_description +=  desc + "\n"
+        new_embed.add_field(name=info[0], value=formatted_description)
+
+    
+    return new_embed
 
 def create_game_preview_embed(matchRef, match,champion_data,queue_data,statistics,username):
     new_embed = discord.Embed(title="Game",color=discord.Color.red(),description="Matchid="+str(matchRef["gameId"])+",Username="+username)
@@ -351,6 +371,8 @@ def create_game_preview_embed(matchRef, match,champion_data,queue_data,statistic
     new_embed.add_field(name="Lane", value=matchRef["lane"])
     new_embed.add_field(name="Champion", value=champion_name)
     new_embed.add_field(name="Date", value=time)
+    new_embed.add_field(name="Normal Stats", value="✅")
+    new_embed.add_field(name="Runes", value="♦️")
     return new_embed
 
 def create_main_embed(statistics,single=False):
@@ -498,6 +520,7 @@ def create_misc_embed(statistics):
     new_embed.add_field(name="Champion Level",value=rai.get_average_stat(statistics[0], "champLevel"))
     new_embed.add_field(name="Inhibitor Kills",value=rai.get_average_stat(statistics[0], "inhibitorKills"))
     new_embed.add_field(name="Turret Kills",value=rai.get_average_stat(statistics[0], "turretKills"))
+    new_embed.add_field(name="Turret Damage",value=rai.get_average_stat(statistics[0], "damageDealtToTurrets"))
     new_embed.add_field(name="Total Healing",value=rai.get_average_stat(statistics[0], "totalHeal"))
     new_embed.add_field(name="Time CCing Others",value=rai.get_average_stat(statistics[0], "timeCCingOthers"))
     new_embed.add_field(name="Largest Multi Kill",value=rai.get_average_stat(statistics[0], "largestMultiKill"))
@@ -524,5 +547,5 @@ def create_champs_embed(statistics,champion_data):
     return new_embed
 
 client = Bot()
-client.run("bot token")
+client.run("Insert bot token")
 
