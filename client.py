@@ -6,8 +6,8 @@ from embeds import *
 
 class Bot(discord.Client):
     async def on_ready(self):
-        self.api = rai.RiotApi("RGAPI-63fecef5-4833-41bb-ab36-659df3088c86", "na1")
-        self.accepted_list = [200689481496526850,299314753220640778,149869170291507201]
+        self.api = rai.RiotApi("Insert Key", "na1")
+        self.accepted_list = ["Insert user Ids"]
         with open("item.json") as json_file:
             self.item_data = json.load(json_file)
         with open("champion.json") as json_file:
@@ -385,5 +385,5 @@ class Bot(discord.Client):
                     await message.channel.send(embed=misc_embed)
 
 client = Bot()
-client.run("NjkyNzYyMDM3OTczMDI0ODI5.XnzO7A.trnya41E90r0PXseY_zCWSZMn4w")
+client.run("Insert Bot Token")
 
