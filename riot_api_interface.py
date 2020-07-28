@@ -150,7 +150,7 @@ def get_player_statistics(match_history, account_id, extras = False, game_mode_e
         # Get participant id of username
         for identity in match["participantIdentities"]:
             player = identity["player"]
-            if player["accountId"] == account_id:
+            if player["currentAccountId"] == account_id:
                 participant_id = identity["participantId"]
                 break
         
