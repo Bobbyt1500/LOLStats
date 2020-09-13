@@ -1,6 +1,5 @@
 import requests
 
-#RGAPI-2f3c250c-cb36-446a-93f3-622a73335229
 class RiotApi:
     def __init__(self, api_key, region):
         self.api_key = api_key
@@ -155,7 +154,7 @@ def get_player_statistics(match_history, account_id, extras = False, game_mode_e
                 break
         
         if not participant_id:
-            return False
+            continue
 
         # Add all statistics on a player to the correct list
         for participant in match["participants"]:
