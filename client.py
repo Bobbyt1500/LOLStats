@@ -391,5 +391,5 @@ class Bot(discord.Client):
                     await message.channel.send(embed=misc_embed)
 
 client = Bot()
-client.run(os.environ["API-KEY"])
+client.run(os.environ["TOKEN"])
 
