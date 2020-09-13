@@ -1,0 +1,5 @@
+discord.py
+json
+re
+requests
+datetime
