@@ -2,12 +2,13 @@ import riot_api_interface as rai
 import json
 import discord
 import re
+import os
 from embeds import *
 
 class Bot(discord.Client):
     async def on_ready(self):
-        self.api = rai.RiotApi("Insert Key", "na1")
-        self.accepted_list = ["Insert user Ids"]
+        self.api = rai.RiotApi(os.environ["API-KEY"], "na1")
+        self.accepted_list = [200689481496526850,299314753220640778,149869170291507201]
         with open("item.json") as json_file:
             self.item_data = json.load(json_file)
         with open("champion.json") as json_file:
@@ -24,6 +25,13 @@ class Bot(discord.Client):
             
             # Split message into arguments
             split_message = message.content.split(" ")
+
+            if split_message[0] == "cr":
+                self.api.region = split_message[1].lower()
+                await message.channel.send("Region changed")
+
+            if split_message[0] == "region":
+                await message.channel.send(self.api.region)
 
             # Request Command
             if split_message[0] == "request":
@@ -239,10 +247,8 @@ class Bot(discord.Client):
             # Help Command
             if split_message[0] == "help":
                 new_embed = discord.Embed(title="Help",color=discord.Color.green())
-                #new_embed.add_field(name="Request Averages",value="request {username/op.gg (replace spaces with _)} avg {number of games} {optional-Name of champion (replace spaces with _)}",inline=True)
-                #new_embed.add_field(name="Request Games",value="request {username/op.gg (replace spaces with _)} games {number of games} {optional-Name of champion (replace spaces with _)}")
-                #new_embed._field(name="Request Custom Game/Match",value="matchrequest {matchid} {Name of champion played (replace spaces with _)}")
-                #new_embed.add_field(name="Request Item",value="item {Name of item (replace spaces with _)/list - to see all my }")
+                
+                
                 new_embed.insert_field_at(index=1,name="Request Averages",value="request {username/op.gg (replace spaces with underscores)} avg {number of games} {optional-Name of champion (replace spaces with underscores)}")
                 await message.channel.send(embed=new_embed)
                 new_embed.clear_fields()
@@ -385,5 +391,5 @@ class Bot(discord.Client):
                     await message.channel.send(embed=misc_embed)
 
 client = Bot()
-client.run("Insert Bot Token")
+client.run(os.environ["API-KEY"])
 
