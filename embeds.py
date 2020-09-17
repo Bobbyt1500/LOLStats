@@ -214,6 +214,7 @@ def create_champs_embed(statistics,champion_data):
     for champion_key in statistics[6]:
 
         # Get champion name
+        champion_name = "Name Not Found"
         for champion in champion_data:
             if champion_data[champion]["key"] == str(champion_key):
                 champion_name = champion
