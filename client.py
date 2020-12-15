@@ -9,14 +9,10 @@ class Bot(discord.Client):
     async def on_ready(self):
         self.api = rai.RiotApi(os.environ["API-KEY"], "na1")
         self.accepted_list = [200689481496526850,299314753220640778,149869170291507201]
-        with open("item.json") as json_file:
-            self.item_data = json.load(json_file)
-        with open("champion.json") as json_file:
-            self.champion_data = json.load(json_file)
-        with open("queues.json") as json_file:
-            self.queue_data = json.load(json_file)
-        with open("perks.json") as json_file:
-            self.runes_data = json.load(json_file)
+        self.item_data = self.api.get_DD_data("item")
+        self.champion_data = self.api.get_DD_data("champion")
+        self.queue_data = self.api.get_static_data("queues")
+        self.runes_data = self.api.get_CD_perks()
 
     async def on_message(self, message):
         user = message.author
@@ -291,7 +287,7 @@ class Bot(discord.Client):
                 for item in data:
                     if data[item]["name"] == query:
                         item_data = data[item]
-                        item_embed = create_item_embed(item_data)
+                        item_embed = create_item_embed(item_data, self.api.get_DD_imageurl(item_data["image"]["full"]))
                         await message.channel.send(embed=item_embed)
                         return
 
@@ -392,4 +388,3 @@ class Bot(discord.Client):
 
 client = Bot()
 client.run(os.environ["TOKEN"])
-

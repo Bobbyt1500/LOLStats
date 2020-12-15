@@ -1,5 +1,6 @@
 import discord
 import datetime
+import re
 import riot_api_interface as rai
 
 def create_user_embed(username):
@@ -74,9 +75,9 @@ def create_main_embed(statistics,single=False):
         new_embed.add_field(name="Win Rate",value=rai.get_wr(statistics[0]))
     return new_embed
 
-def create_item_embed(item_data):
+def create_item_embed(item_data, imageurl):
     new_embed = discord.Embed(title=item_data["name"],color=discord.Color.dark_blue())
-    new_embed.set_image(url="https://ddragon.leagueoflegends.com/cdn/10.14.1/img/item/"+item_data["image"]["full"])
+    new_embed.set_image(url=imageurl)
     new_embed.add_field(name="Usage", value=item_data["plaintext"])
 
 

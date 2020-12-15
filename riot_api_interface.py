@@ -4,6 +4,24 @@ class RiotApi:
     def __init__(self, api_key, region):
         self.api_key = api_key
         self.region = region
+
+    def get_DD_imageurl(self, image_data):
+        version = requests.get("https://ddragon.leagueoflegends.com/api/versions.json").json()[0]
+        return "https://ddragon.leagueoflegends.com/cdn/"+version+"/img/item/" + image_data
+
+    def get_DD_data(self, type):
+        version = requests.get("https://ddragon.leagueoflegends.com/api/versions.json").json()[0]
+        response = requests.get("http://ddragon.leagueoflegends.com/cdn/"+version+"/data/en_US/"+type+".json")
+        return response.json()
+    
+    def get_static_data(self, type):
+        response = requests.get("http://static.developer.riotgames.com/docs/lol/"+type+".json")
+        return response.json()
+    
+    def get_CD_perks(self):
+        # Returns the perks data
+        response = requests.get("http://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/perks.json")
+        return response.json()
     
     def make_request(self, link, parameters=None):
         # Create a request url
