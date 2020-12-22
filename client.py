@@ -260,13 +260,13 @@ class Bot(discord.Client):
                 new_embed.insert_field_at(index=1,name="Request Item",value="item {Name of item (replace spaces with underscores)/list - to see all items }")
                 await message.channel.send(embed=new_embed)
                 new_embed.clear_fields()
+                new_embed.insert_field_at(index=1,name="Change Region",value="cr {possible regions are: BR1,EUN1,EUW1,JP1,KR,LA1,LA2,NA1,OC1,TR1,RU}  example usage: cr NA1")
+                await message.channel.send(embed=new_embed)
+                new_embed.clear_fields()
                 new_embed.insert_field_at(index=1,name="Multi Request",value="multirequest {op.gg multi}")
                 await message.channel.send(embed=new_embed)
                 new_embed.clear_fields()
                 new_embed.insert_field_at(index=1,name="Check Region",value="region")
-                await message.channel.send(embed=new_embed)
-                new_embed.clear_fields()
-                new_embed.insert_field_at(index=1,name="Change Region",value="cr {region (possible regions are: BR1,EUN1,EUW1,JP1,KR,LA1,LA2,NA1,OC1,TR1,RU)}")
                 await message.channel.send(embed=new_embed)
 
             # Item Command
